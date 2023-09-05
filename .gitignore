@@ -1,8 +1,0 @@
-# Vim swap files
-*.swp
-dist/*
-.vscode/*
-/gitsign
-/gitsign-credential-cache
-!/cmd/gitsign-credential-cache
-vendor
