@@ -7,6 +7,10 @@ USER root
 RUN make -f Build.mak gitsign-cli-darwin-amd64
 RUN make -f Build.mak gitsign-cli-linux-amd64
 RUN make -f Build.mak gitsign-cli-windows
+RUN gzip gitsign_cli_darwin_amd64
+RUN gzip gitsign_cli_linux_amd64
+RUN gzip gitsign_cli_windows_amd64.exe
+RUN ls -a
 
 # Install Gitsign
 FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
@@ -18,13 +22,13 @@ LABEL io.openshift.tags="gitsign trusted-artifact-signer"
 LABEL summary="Provides the gitsign CLI binary for signing and verifying container images."
 LABEL com.redhat.component="gitsign"
 
-COPY --from=build-env /gitsign/gitsign_cli_darwin_amd64 /usr/local/bin/gitsign_cli_darwin_amd64
-COPY --from=build-env /gitsign/gitsign_cli_linux_amd64 /usr/local/bin/gitsign_cli_linux_amd64
-COPY --from=build-env /gitsign/gitsign_cli_windows_amd64.exe /usr/local/bin/gitsign_cli_windows_amd64.exe
+COPY --from=build-env /gitsign/gitsign_cli_darwin_amd64.gz /usr/local/bin/gitsign_cli_darwin_amd64.gz
+COPY --from=build-env /gitsign/gitsign_cli_linux_amd64.gz /usr/local/bin/gitsign_cli_linux_amd64.gz
+COPY --from=build-env /gitsign/gitsign_cli_windows_amd64.exe.gz /usr/local/bin/gitsign_cli_windows_amd64.exe.gz
 
-RUN chown root:0 /usr/local/bin/gitsign_cli_darwin_amd64 && chmod g+wx /usr/local/bin/gitsign_cli_darwin_amd64
-RUN chown root:0 /usr/local/bin/gitsign_cli_linux_amd64 && chmod g+wx /usr/local/bin/gitsign_cli_linux_amd64
-RUN chown root:0 /usr/local/bin/gitsign_cli_windows_amd64.exe && chmod g+wx /usr/local/bin/gitsign_cli_windows_amd64.exe
+RUN chown root:0 /usr/local/bin/gitsign_cli_darwin_amd64.gz && chmod g+wx /usr/local/bin/gitsign_cli_darwin_amd64.gz
+RUN chown root:0 /usr/local/bin/gitsign_cli_linux_amd64.gz && chmod g+wx /usr/local/bin/gitsign_cli_linux_amd64.gz
+RUN chown root:0 /usr/local/bin/gitsign_cli_windows_amd64.exe.gz && chmod g+wx /usr/local/bin/gitsign_cli_windows_amd64.exe.gz
 
 # Configure home directory
 ENV HOME=/home
