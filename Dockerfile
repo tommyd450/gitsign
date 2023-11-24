@@ -1,18 +1,18 @@
 # Build stage
-FROM registry.access.redhat.com/ubi9/go-toolset@sha256:82d9bc5d3ceb43635288880f26207201e55d1c688a60ebbfff4f54d4963a62a1 AS build-env
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.21 AS build-env
 WORKDIR /gitsign
 RUN git config --global --add safe.directory /gitsign
 COPY . .
 USER root
 RUN git stash && \
     export GIT_VERSION=$(git describe --tags --always --dirty) && \
-    git stash pop && \
-    make -f Build.mak gitsign-cli-darwin-amd64 && \
+    git stash pop
+    make -f Build.mak gitsign-cli-darwin-amd64
     make -f Build.mak gitsign-cli-linux-amd64 && \
-    make -f Build.mak gitsign-cli-windows && \
+    make -f Build.mak gitsign-cli-windows
     gzip gitsign_cli_darwin_amd64 && \
-    gzip gitsign_cli_linux_amd64 && \
-    gzip gitsign_cli_windows_amd64.exe && \
+    gzip gitsign_cli_linux_amd64
+    gzip gitsign_cli_windows_amd64.exe 
     ls -la
 
 # Install Gitsign
