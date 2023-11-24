@@ -6,13 +6,13 @@ COPY . .
 USER root
 RUN git stash && \
     export GIT_VERSION=$(git describe --tags --always --dirty) && \
-    git stash pop
-    make -f Build.mak gitsign-cli-darwin-amd64
+    git stash pop && \
+    make -f Build.mak gitsign-cli-darwin-amd64 && \
     make -f Build.mak gitsign-cli-linux-amd64 && \
-    make -f Build.mak gitsign-cli-windows
+    make -f Build.mak gitsign-cli-windows && \
     gzip gitsign_cli_darwin_amd64 && \
-    gzip gitsign_cli_linux_amd64
-    gzip gitsign_cli_windows_amd64.exe 
+    gzip gitsign_cli_linux_amd64 && \
+    gzip gitsign_cli_windows_amd64.exe && \
     ls -la
 
 # Install Gitsign
