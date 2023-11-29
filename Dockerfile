@@ -4,7 +4,9 @@ WORKDIR /gitsign
 RUN git config --global --add safe.directory /gitsign
 COPY . .
 USER root
-RUN export GIT_VERSION=$(git describe --tags --always --dirty) && \
+RUN git stash && \
+    export GIT_VERSION=$(git describe --tags --always --dirty) && \
+    git stash pop && \
     go mod vendor && \
     make -f Build.mak gitsign-cli-darwin-amd64 && \
     make -f Build.mak gitsign-cli-linux-amd64 && \
