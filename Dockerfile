@@ -7,7 +7,7 @@ USER root
 RUN git stash && \
     export GIT_VERSION=$(git describe --tags --always --dirty) && \
     git stash pop && \
-    go mod vendor && \
+    go mod download && \
     make -f Build.mak gitsign-cli-darwin-amd64 && \
     make -f Build.mak gitsign-cli-linux-amd64 && \
     make -f Build.mak gitsign-cli-windows && \
