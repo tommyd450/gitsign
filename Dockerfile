@@ -8,12 +8,14 @@ RUN git stash && \
     export GIT_VERSION=$(git describe --tags --always --dirty) && \
     git stash pop && \
     go mod download && \
-    make -f Build.mak gitsign-cli-darwin-amd64 && \
-    make -f Build.mak gitsign-cli-linux-amd64 && \
-    make -f Build.mak gitsign-cli-windows && \
+    make -f Build.mak cross-platform && \
     gzip gitsign_cli_darwin_amd64 && \
     gzip gitsign_cli_linux_amd64 && \
     gzip gitsign_cli_windows_amd64.exe && \
+    gzip gitsign_cli_darwin_arm64 && \
+    gzip gitsign_cli_linux_arm64 && \
+    gzip gitsign_cli_linux_ppc64le && \
+    gzip gitsign_cli_linux_s390x && \
     ls -la
 
 # Install Gitsign
@@ -28,6 +30,10 @@ LABEL com.redhat.component="gitsign"
 
 COPY --from=build-env /gitsign/gitsign_cli_darwin_amd64.gz /usr/local/bin/gitsign_cli_darwin_amd64.gz
 COPY --from=build-env /gitsign/gitsign_cli_linux_amd64.gz /usr/local/bin/gitsign_cli_linux_amd64.gz
+COPY --from=build-env /gitsign/gitsign_cli_darwin_arm64.gz /usr/local/bin/gitsign_cli_darwin_arm64.gz
+COPY --from=build-env /gitsign/gitsign_cli_linux_arm64.gz /usr/local/bin/gitsign_cli_linux_arm64.gz
+COPY --from=build-env /gitsign/gitsign_cli_linux_ppc64le.gz /usr/local/bin/gitsign_cli_linux_ppc64le.gz
+COPY --from=build-env /gitsign/gitsign_cli_linux_s390x.gz /usr/local/bin/gitsign_cli_linux_s390x.gz
 COPY --from=build-env /gitsign/gitsign_cli_windows_amd64.exe.gz /usr/local/bin/gitsign_cli_windows_amd64.exe.gz
 
 ENV HOME=/home
@@ -36,6 +42,10 @@ WORKDIR ${HOME}
 RUN chown root:0 /usr/local/bin/gitsign_cli_darwin_amd64.gz && chmod g+wx /usr/local/bin/gitsign_cli_darwin_amd64.gz && \
     chown root:0 /usr/local/bin/gitsign_cli_linux_amd64.gz && chmod g+wx /usr/local/bin/gitsign_cli_linux_amd64.gz && \
     chown root:0 /usr/local/bin/gitsign_cli_windows_amd64.exe.gz && chmod g+wx /usr/local/bin/gitsign_cli_windows_amd64.exe.gz && \
+    chown root:0 /usr/local/bin/gitsign_cli_linux_arm64.gz && chmod g+wx /usr/local/bin/gitsign_cli_linux_arm64.gz && \
+    chown root:0 /usr/local/bin/gitsign_cli_darwin_arm64.gz && chmod g+wx /usr/local/bin/gitsign_cli_darwin_arm64.gz && \
+    chown root:0 /usr/local/bin/gitsign_cli_linux_ppc64le.gz && chmod g+wx /usr/local/bin/gitsign_cli_linux_ppc64le.gz && \
+    chown root:0 /usr/local/bin/gitsign_cli_linux_s390x.gz && chmod g+wx /usr/local/bin/gitsign_cli_linux_s390x.gz && \
     chgrp -R 0 /${HOME} && chmod -R g=u /${HOME}
 
 LABEL com.redhat.component="gitsign"
