@@ -1,5 +1,5 @@
 # Build stage
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.21 AS build-env
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.21@sha256: AS build-env
 WORKDIR /gitsign
 RUN git config --global --add safe.directory /gitsign
 COPY . .
