@@ -15,3 +15,5 @@ jobs:
       branch: ${{ matrix.branch }}
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+      REDHAT_REGISTRY_USERNAME: ${{ secrets.GITHUB_TOKEN }}
+      REDHAT_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
